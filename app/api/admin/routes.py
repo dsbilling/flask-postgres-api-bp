@@ -1,9 +1,6 @@
 
-from flask import  current_app, abort, request
-
+from flask import current_app, abort, request
 from . import admin_blueprint
-from app import database
-from app.models import User, Stock, WatchStock
 from app.utils.apiutils import token_required
 
 
@@ -18,4 +15,4 @@ def admin_before_request(current_user):
 
 @admin_blueprint.route('/ping')
 def test():
-    return "Pong"
+    return 'Pong'

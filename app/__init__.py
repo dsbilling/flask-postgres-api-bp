@@ -1,14 +1,8 @@
-from config import DevelopmentConfig
+from config import Config
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
-import os
-
-
-####################################
-### Configuration           ########
-####################################
 
 database = SQLAlchemy()
 db_migration = Migrate()
@@ -17,7 +11,7 @@ db_migration = Migrate()
 def create_app():
 
     app = Flask(__name__)
-    app.config.from_object(DevelopmentConfig)
+    app.config.from_object(Config)
 
     initialize_extensions(app)
     register_blueprints(app)
@@ -37,5 +31,5 @@ def register_blueprints(app):
     from app.api.admin import admin_blueprint
 
     app.register_blueprint(stocks_blueprint)
-    app.register_blueprint(users_blueprint, url_prefix="/users")
-    app.register_blueprint(admin_blueprint, url_prefix="/admin")
+    app.register_blueprint(users_blueprint, url_prefix='/users')
+    app.register_blueprint(admin_blueprint, url_prefix='/admin')

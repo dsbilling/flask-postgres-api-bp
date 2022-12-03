@@ -1,15 +1,9 @@
 from app import database
-from flask import current_app
-from datetime import datetime, timedelta
+from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
-import requests
 
-################
-#### Models ####
-################
 
 class Stock(database.Model):
-
     __tablename__ = 'stocks'
 
     id = database.Column(database.Integer, primary_key=True)
@@ -38,12 +32,11 @@ class Stock(database.Model):
 
 
 class User(database.Model):
-
     __tablename__ = 'users'
 
-    id = database.Column(database.Integer, primary_key = True)
+    id = database.Column(database.Integer, primary_key=True)
     name = database.Column(database.String(100))
-    email = database.Column(database.String(70), unique = True)
+    email = database.Column(database.String(70), unique=True)
     password_hashed = database.Column(database.String(160))
     registered_on = database.Column(database.DateTime)
     email_confirmation_sent_on = database.Column(database.DateTime)
@@ -53,8 +46,7 @@ class User(database.Model):
     user_type = database.Column(database.String(10), default='User')
     watchstocks = database.relationship('WatchStock', backref='user', lazy='dynamic')
 
-    def __init__(self, name:str, email: str, password_plaintext: str, user_type='User'):
-
+    def __init__(self, name: str, email: str, password_plaintext: str, user_type='User'):
         self.name = name
         self.email = email
         self.password_hashed = self._generate_password_hash(password_plaintext)
@@ -109,7 +101,6 @@ class User(database.Model):
 
 
 class WatchStock(database.Model):
-
     __tablename__ = 'watchstocks'
 
     id = database.Column(database.Integer, primary_key=True)
