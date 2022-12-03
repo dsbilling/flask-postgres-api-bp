@@ -3,5 +3,5 @@ repos:
     rev: 5.0.4
     hooks:
     -   id: flake8
-        additional_dependencies: [flake8-print, flake8-quotes, flake8-use-fstring]
+        additional_dependencies: [flake8-print, flake8-quotes, flake8-use-fstring, flake8-bugbear, flake8-simplify]
         args: [--config=.flake8]
