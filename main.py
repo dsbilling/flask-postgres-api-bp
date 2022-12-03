@@ -1,7 +1,6 @@
-#Entry point of the flask app
-
 from app import create_app
+from config import Config
 
-if __name__ == "__main__":
-	app = create_app()
-	app.run(debug=True)
+if __name__ == '__main__':
+    app = create_app()
+    app.run(debug=Config.DEBUG)
