@@ -8,8 +8,8 @@ load_dotenv()
 class Config:
     ENV = getenv('ENV', 'dev')
 
-    DEBUG = False if ENV not in ['dev', 'test'] else True
-    TESTING = False if ENV not in ['dev', 'test'] else True
+    DEBUG = not ENV not in ['dev', 'test']
+    TESTING = not ENV not in ['dev', 'test']
 
     # Database
     DB_DIALECT = getenv('DB_DIALECT', 'postgresql')
@@ -34,6 +34,6 @@ class Config:
             pass
 
     logging.basicConfig(
-        level=getenv("LOGLEVEL", "DEBUG"),
+        level=getenv('LOGLEVEL', 'DEBUG'),
         handlers=[logging.FileHandler(log_file_path), logging.StreamHandler()]
     )
