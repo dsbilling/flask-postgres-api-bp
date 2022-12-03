@@ -1,52 +1,39 @@
-import os
+from os import getenv, path, makedirs
 import logging
 from dotenv import load_dotenv
 
 load_dotenv()
 
 
-class Config(object):
-    DEBUG = False
-    TESTING = False
+class Config:
+    ENV = getenv('ENV', 'dev')
 
-    POSTGRES_URL = os.getenv("POSTGRES_URL")
-    POSTGRES_USER = os.getenv("POSTGRES_USER")
-    POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
-    POSTGRES_DB = os.getenv("POSTGRES_DB")
+    DEBUG = False if ENV not in ['dev', 'test'] else True
+    TESTING = False if ENV not in ['dev', 'test'] else True
 
-    # SQLAlchemy
-    uri_template = "postgresql+psycopg2://{user}:{pw}@{url}/{db}"
-    SQLALCHEMY_DATABASE_URI = uri_template.format(
-        user=POSTGRES_USER, pw=POSTGRES_PASSWORD, url=POSTGRES_URL, db=POSTGRES_DB
-    )
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    # Database
+    DB_DIALECT = getenv('DB_DIALECT', 'postgresql')
+    DB_HOST = getenv('DB_HOST', '127.0.0.1')
+    DB_PORT = getenv('DB_PORT', '5432')
+    DB_USERNAME = getenv('DB_USERNAME', 'postgres')
+    DB_PASSWORD = getenv('DB_PASSWORD', '')
+    DB_NAME = getenv('DB_NAME', 'blank')
+    DATABASE_URI = f'{DB_DIALECT}://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}' if \
+        ENV != 'test' else f'{getenv("DATABASE_URI")}'
 
     # Secret Key
-    SECRET_KEY = "BAD_SECRET_KEY"
+    SECRET_KEY = getenv('SECRET_KEY', None)
 
-    # API settings
-    API_PAGINATION_PER_PAGE = 10
-
-    # --------- Logging ---------
-    if not os.path.exists("./logs/"):
-        os.makedirs("./logs/")
-    if not os.path.exists("./logs/trace.log"):
-        open("./logs/trace.log", "x")
+    # Logging
+    log_path = './logs/'
+    log_file_path = f'{log_path}app.log'
+    if not path.exists(log_path):
+        makedirs(log_path)
+    if not path.exists(log_file_path):
+        with open(log_file_path, 'w'):
+            pass
 
     logging.basicConfig(
-        level=os.getenv("LOGLEVEL", "DEBUG"),
-        handlers=[logging.FileHandler("./logs/trace.log"), logging.StreamHandler()],
+        level=getenv("LOGLEVEL", "DEBUG"),
+        handlers=[logging.FileHandler(log_file_path), logging.StreamHandler()]
     )
-
-
-class DevelopmentConfig(Config):
-    DEBUG = True
-
-
-class TestConfig(Config):
-    TESTING = True
-
-
-class ProductionConfig(Config):
-    # production config
-    pass
