@@ -1,35 +1,28 @@
 from config import Config
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
+from .api import api_bp
+import logging
 from flask_migrate import Migrate
-
+from flask_sqlalchemy import SQLAlchemy
 
 database = SQLAlchemy()
 db_migration = Migrate()
 
 
 def create_app():
-
     app = Flask(__name__)
     app.config.from_object(Config)
 
-    initialize_extensions(app)
-    register_blueprints(app)
-
+    register_extensions(app)
+    logging.basicConfig(level=logging.DEBUG)
+    app.register_blueprint(api_bp, url_prefix='/')
     return app
 
 
-def initialize_extensions(app):
-    database.init_app(app)
-    db_migration.init_app(app, database)
+def register_extensions(app):
 
+    db = SQLAlchemy()
+    migrate = Migrate()
 
-def register_blueprints(app):
-    # Import the blueprints
-    from app.api.stocks import stocks_blueprint
-    from app.api.users import users_blueprint
-    from app.api.admin import admin_blueprint
-
-    app.register_blueprint(stocks_blueprint)
-    app.register_blueprint(users_blueprint, url_prefix='/users')
-    app.register_blueprint(admin_blueprint, url_prefix='/admin')
+    db.init_app(app)
+    migrate.init_app(app, db)
