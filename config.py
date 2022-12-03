@@ -18,7 +18,7 @@ class Config:
     DB_USERNAME = getenv('DB_USERNAME', 'postgres')
     DB_PASSWORD = getenv('DB_PASSWORD', '')
     DB_NAME = getenv('DB_NAME', 'blank')
-    DATABASE_URI = f'{DB_DIALECT}://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}' if \
+    SQLALCHEMY_DATABASE_URI = f'{DB_DIALECT}://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}' if \
         ENV != 'test' else f'{getenv("DATABASE_URI")}'
 
     # Secret Key
@@ -37,3 +37,8 @@ class Config:
         level=getenv('LOGLEVEL', 'DEBUG'),
         handlers=[logging.FileHandler(log_file_path), logging.StreamHandler()]
     )
+
+    # Swagger
+    SWAGGER_TITLE = getenv('SWAGGER_TITLE', 'Blank API')
+    SWAGGER_VERSION = getenv('SWAGGER_VERSION', '1.0')
+    SWAGGER_DESCRIPTION = getenv('SWAGGER_DESCRIPTION', 'Blank API')
