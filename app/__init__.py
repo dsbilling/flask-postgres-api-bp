@@ -1,7 +1,7 @@
 from config import Config
 from flask import Flask
 from .api import api_bp
-from .ext import db, migrate
+from .ext import db
 
 
 def create_app():
@@ -9,7 +9,6 @@ def create_app():
     app.config.from_object(Config)
 
     db.init_app(app)
-    migrate.init_app(app, db)
 
     app.register_blueprint(api_bp)
     return app
